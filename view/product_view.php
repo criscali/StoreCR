@@ -6,7 +6,7 @@
     $productos = $pModel->getProducts();
     $respuesta = json_decode($productos);
     
-    
+    //se agrega comentario para ver en git.
 
 
     foreach($respuesta as $r){?>
