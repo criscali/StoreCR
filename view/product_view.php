@@ -4,17 +4,25 @@
     $pModel = new ProductModel();
 
     $productos = $pModel->getProducts();
-    $respuesta = json_decode($productos);
-    
-    //se agrega comentario para ver en git.
+    $respuesta = $productos;
 
+?>
 
-    foreach($respuesta as $r){?>
-        <img src="../../img/<?php echo $r->imagen; ?>" alt="">
+<table border="1">
+    <tr>
+        <td>CODIGO</td>
+        <td>NOMBRE PRODUCTO</td>
+        <td>PRECIO</td>
+        <td>CANTIDAD</td>
+        <td>IMAGEN</td>
+        <td>OPCIONES</td>
+    </tr>
+    <tbody id="tblProductos">
         
-    <?php
-    }
-    ?>
+    </tbody>
+</table>
 
-
-<a href="../ajax/product.php?op=listar" >ver Productos</a>
+<footer>
+    <?php 
+        require_once "footer.php"; ?>
+</footer>

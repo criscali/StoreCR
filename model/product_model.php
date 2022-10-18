@@ -13,10 +13,10 @@
         }
 
         public function getProducts(){
-            $sql = "SELECT * FROM Producto WHERE oculto=0";
+            $sql = "SELECT codigo, nom_pro, precio, cantidad, imagen FROM Producto WHERE oculto=0";
             $ejecutar = $this->conexion->query($sql);
             $filas = $ejecutar->fetchAll();
-            $respuestaJson = json_encode($filas);
+            $respuestaJson = $filas;
             return $respuestaJson;
         }
 
@@ -26,14 +26,16 @@
             $ejecutar = $this->conexion->query($ultimoCodigo);
             $ultimoregistro = $ejecutar->fetchAll();
             $lastCode = $ultimoregistro[0]['codigo']+=1;
+            $oculto = 0;
 
-            $sql = "INSERT INTO PRODUCTO (codigo, nom_pro, precio, cantidad, imagen) VALUES(?,?,?,?,?)";
+            $sql = "INSERT INTO PRODUCTO (codigo, nom_pro, precio, cantidad, imagen, oculto) VALUES(?,?,?,?,?,?)";
             $ejecutar = $this->conexion->prepare($sql);
             $ejecutar->bindParam(1, $lastCode);
             $ejecutar->bindParam(2, $nom_pro);
             $ejecutar->bindParam(3, $precio);
             $ejecutar->bindParam(4, $cantidad);
             $ejecutar->bindParam(5, $imagen);
+            $ejecutar->bindParam(6, $oculto);
 
             //$ejecutar->execute();
             //return $this->conexion->lastInsertId();
@@ -41,7 +43,7 @@
                 $respuestaJson = "PRODUCTO CREADO.";
             }
             else{
-                $resultado = "ERROR AL CREAR EL PRODUCTO.";
+                $respuestaJson = "ERROR AL CREAR EL PRODUCTO.";
             }
             //$respuestaJson = json_encode($ultimoregistro[0]['codigo']);
             return $respuestaJson;
