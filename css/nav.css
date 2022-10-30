@@ -1,0 +1,133 @@
+
+
+
+.navegador {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 15%;
+  background-color: #4e73df ;
+  position: absolute;
+  height: 100%;
+  overflow: auto;
+}
+
+li a {
+  display: block;
+  color: #ffffff;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+
+.listar{
+  display: flex;
+  justify-content: center;
+  
+}
+
+.table{
+  width: 70%;
+  margin: 0 auto;
+  margin-top: 100px;
+  
+}
+
+.styled-table{
+  border-collapse: collapse; 
+  margin: 25px 0; 
+  font-size: 1em; 
+  font-family: sans-serif; 
+  min-width: 450px; 
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr { background-color: #980081; color: #ffffff; text-align: middle; }
+.styled-table th, .styled-table td { padding: 12px 15px; }
+.styled-table tbody tr { border-bottom: 1px solid #dddddd; } .styled-table tbody tr:nth-of-type(even) { background-color: #f3f3f3; } .styled-table tbody tr:last-of-type { border-bottom: 2px solid #009879; }
+
+.styled-table tbody tr:hover{
+  background-color: chocolate;
+}
+
+body{
+  margin-bottom: 120px;
+}
+
+.contenedorMain{
+  background-color: blueviolet;
+  
+
+}
+
+
+footer{
+  /* position: fixed;
+    height: 6rem;
+    width: 80%;
+    margin-top: 50%;
+    background-color: aqua;
+    margin-left: 20%; */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 70px;
+    --background-color: aqua;
+    
+    background-color: #4e73df ;
+    width: 85%;
+    margin-left: 15%;
+}
+
+.buscador{
+  background-color: burlywood;
+  --height: 152%;
+  width: 85%;
+  margin-left: 15%;
+}
+.buscador input text{
+  margin-left: 30%;
+}
+
+
+.formActualizar {
+  background-color: antiquewhite;
+  position: absolute;
+  width: 50%;
+  height: 40%;
+  margin-left: 35%;
+  margin-top: 18%;
+}
+
+.formCreate{
+  background-color: antiquewhite;
+  position: absolute;
+  width: 50%;
+  height: 40%;
+  margin-left: 35%;
+  margin-top: 18%;
+}
+
+#inputUpdate{
+  width: 100%;
+  
+}
+
+#buttonUpdate{
+  width: 100px;
+}
+
+.cardUpdate{
+  position: absolute;
+  margin-left: 50%;
+  margin-top: 1%;
+}

@@ -13,12 +13,36 @@
         }
 
         public function getProducts(){
-            $sql = "SELECT codigo, nom_pro, precio, cantidad, imagen FROM Producto WHERE oculto=0";
-            $ejecutar = $this->conexion->query($sql);
-            $filas = $ejecutar->fetchAll();
-            $respuestaJson = $filas;
-            return $respuestaJson;
+            $sql = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = ?";
+
+            //$ejecutar = $this->conexion->query($sql);
+            //$filas[] = $ejecutar->fetchAll();
+            $ejecutar = $this->conexion->prepare($sql);
+            $ejecutar->execute(array(0));
+           
+            $filas[] = $ejecutar->fetchAll();
+            $resultado = $filas;
+            
+            //$arrayTodo = array('registros'=>$resultado);
+            //return $resultado[0];
+            return $arrayName = array("datos"=> $resultado);
         }
+
+
+        public function getProductCod($codigo){
+            $sql = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE codigo = ?";
+
+            //$ejecutar = $this->conexion->query($sql);
+            //$filas[] = $ejecutar->fetchAll();
+            $ejecutar = $this->conexion->prepare($sql);
+            $ejecutar->execute(array($codigo));
+            $filas[] = $ejecutar->fetchAll();
+            
+            $respuestaJson = $filas;
+            return $respuestaJson[0];
+            //return $respuestaJson; 
+        }
+
 
         public function createProduct($nom_pro, $precio, $cantidad, $imagen){
 
@@ -51,13 +75,15 @@
 
         public function updateProduct($codigo, $nom_pro, $precio, $cantidad, $imagen){
 
-            if($nom_pro == "" || $precio == "" || $cantidad ==""){
-                $actualizarSql = "UPDATE producto SET  imagen=?
+            if($imagen == ""){
+                $actualizarSql = "UPDATE producto SET  nom_pro=?, precio=?, cantidad=?
                 WHERE codigo = ?";
 
                 $ejecutar = $this->conexion->prepare($actualizarSql);
-                $ejecutar->bindParam(1, $imagen);
-                $ejecutar->bindParam(2, $codigo);
+                $ejecutar->bindParam(1, $nom_pro);
+                $ejecutar->bindParam(2, $precio);
+                $ejecutar->bindParam(3, $cantidad);
+                $ejecutar->bindParam(4, $codigo);
                 //$ejecutar->execute();
             }
             else{
@@ -108,6 +134,57 @@
             return json_encode($respuestaJson);
         }
         
+
+
+
+        public function pagination($paginaE){
+
+            $tamano_paginas=6;
+            if(isset($paginaE)){
+                //$this->getProducts();
+            
+            
+            //$pagina = $paginaE;
+            $desde = ($paginaE-1)*$tamano_paginas;
+            $sql_total = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0";
+            $ejecutar = $this->conexion->prepare($sql_total);
+            $ejecutar->execute();
+            $numRegistros = $ejecutar->rowCount();
+            $total_paginas = ceil($numRegistros/$tamano_paginas);
+
+            $sql_limite = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0 LIMIT $desde, $tamano_paginas";
+            $ejecutar = $this->conexion->prepare($sql_limite);
+            //$resultado = $ejecutar->execute();
+            $ejecutar->execute();
+            $filas[] = $ejecutar->fetchAll();
+            $resultado = $filas;
+            
+            //$arrayTodo = array('registros'=>$resultado);
+            //return $resultado[0];
+            return $arrayName = array("datos"=> $resultado, "tamanoPagina"=> $tamano_paginas, "total_paginas"=> $total_paginas);
+
+            }
+            else{
+                $desde = (1-1)*$tamano_paginas;
+                $sql_total = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0";
+                $ejecutar = $this->conexion->prepare($sql_total);
+                $ejecutar->execute();
+                $numRegistros = $ejecutar->rowCount();
+                $total_paginas = ceil($numRegistros/$tamano_paginas);
+
+                $sql_limite = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0 LIMIT $desde, $tamano_paginas";
+                $ejecutar = $this->conexion->prepare($sql_limite);
+            
+
+                $ejecutar->execute();
+                $filas[] = $ejecutar->fetchAll();
+                $resultado = $filas;
+                return $arrayName = array("datos"=> $resultado, "tamanoPagina"=> $tamano_paginas, "total_paginas"=> $total_paginas);
+            }
+                        
+                        
+            
+        }
 
     }
 

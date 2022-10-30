@@ -1,26 +1,31 @@
 <?php
 
-    require_once ("../model/product_model.php");
-    $pModel = new ProductModel();
+    //require_once ("../model/product_model.php");
+   /*  $pModel = new ProductModel();
 
     $productos = $pModel->getProducts();
     $respuesta = $productos;
-
+ */
 ?>
 
 <table border="1">
-    <tr>
-        <td>CODIGO</td>
-        <td>NOMBRE PRODUCTO</td>
-        <td>PRECIO</td>
-        <td>CANTIDAD</td>
-        <td>IMAGEN</td>
-        <td>OPCIONES</td>
+    <thead>
+        <tr>
+            <th>CODIGO</th>
+            <th>NOMBRE PRODUCTO</th>
+            <th>PRECIO</th>
+            <th>CANTIDAD</th>
+            <th>IMAGEN</th>
+            <th>OPCIONES</th>
     </tr>
     <tbody id="tblProductos">
+
+    
+            
         
     </tbody>
 </table>
+    
 
 <footer>
     <?php 

@@ -1,4 +1,4 @@
-
+/* 
 
 
 
@@ -52,17 +52,13 @@ async function listarProducts(){
             let data = json.data;
             data.forEach((item) =>{
                 let  newtr = document.createElement("tr");
-                //newtr.id = "row_"+item.codigo;
+                newtr.id = "row_"+item.codigo;
                 newtr.innerHTML = `<tr> 
-                                    
-                                    <td>${item.codigo}</td>   
+                                    <th scope="row">${item.codigo}</th>
                                     <td>${item.nom_pro}</td>   
                                     <td>${item.precio}</td>   
                                     <td>${item.cantidad}</td> 
                                     <td><img src='../img/${item.imagen}' width='50 px' height='50'></td>
-                                    <td>
-                                        <a href=''>borrar</a>
-                                        <a href=''>Actualizar</a>
                                     </td>`;
                 document.querySelector("#tblProductos").appendChild(newtr);
             }); 
@@ -74,13 +70,67 @@ async function listarProducts(){
         console.log("ocurrio un error."+err);
     } 
 
+
+}
+
+
+listarProducts();
+ */
+
+
+
+
+
+/* let verDatos  = async () =>{
     try{
-        let respuesta = await fetch("../ajax/product.php?op=listar");
-        json = await respuesta.json();
-        console.log(json);
+        let url = "../ajax/product.php?op=listar";
+        //let url = "../view/product_view.php";
+        let resultado = await fetch(url);
+        if(resultado.ok){
+            let datos = await resultado.json();
+            console.log(datos);
+        }
+        else{
+            console.log(resultado.status);
+        }
+
     }catch(err){
+        console.log(err);
+    }
+}
+
+verDatos(); */
+
+
+async function listarProducts(){
+    try{
+        let respuesta = await fetch("../ajax/product.php");
+        //let respuesta = await fetch("../view/product_view.php");
+        json = await respuesta.json();
+        
+        if(json.status){
+            let data = json.data;
+            data.forEach((item) =>{
+                let  newtr = document.createElement("tr");
+                newtr.id = "row_"+item.codigo;
+                newtr.innerHTML = `<tr> 
+                                    <th scope="row">${item.codigo}</th>
+                                    <td>${item.nom_pro}</td>   
+                                    <td>${item.precio}</td>   
+                                    <td>${item.cantidad}</td> 
+                                    <td><img src='../img/${item.imagen}' width='50 px' height='50'></td>
+                                    </td>`;
+                document.querySelector("#tblProductos").appendChild(newtr);
+            }); 
+            
+        }
+        console.log(json); 
+    }
+    catch(err){
         console.log("ocurrio un error."+err);
     } 
+
+
 }
 
 listarProducts();

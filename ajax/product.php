@@ -71,13 +71,18 @@ if($_GET['op'] == 'delete'){
     } */
 
     if($_GET['op'] == 'listar'){
-        $respuestaListar = (array) $pModel->getProducts();
+        $respuestaListar =  $pModel->getProducts();
         $arrayRespuesta = array('status'=> false, 'data' => "");
         if(!empty($respuestaListar)){
+
             $arrayRespuesta['status'] = true;
             $arrayRespuesta['data'] = $respuestaListar;
+            
         }
+        
         echo json_encode($arrayRespuesta);
+
+
         
     }
 
