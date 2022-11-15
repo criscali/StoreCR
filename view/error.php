@@ -1,7 +1,5 @@
 
 
 <h1>
-    <strong><?php
-                var_dump($paginas);
-        ?></strong>
+    <strong>ERROR PAGINA SOLICITADA NO EXISTE.</strong>
 </h1>

@@ -102,7 +102,7 @@ listarProducts();
 verDatos(); */
 
 
-async function listarProducts(){
+/* async function listarProducts(){
     try{
         let respuesta = await fetch("../ajax/product.php");
         //let respuesta = await fetch("../view/product_view.php");
@@ -133,4 +133,49 @@ async function listarProducts(){
 
 }
 
-listarProducts();
+listarProducts(); */
+
+
+
+if(document.querySelector("#frmGuardarPro")){
+    let frmRegistro = document.querySelector("#frmGuardarPro");
+    frmRegistro.onsubmit = function(e){
+        e.preventDefault();
+        fGuardar();
+    }
+
+    async function fGuardar(){
+        let txtNomPro = document.querySelector(".nom_pro").value;
+        let txtPrecio = document.querySelector(".precio").value;
+        let txtCantidad = document.querySelector(".cantidad").value;
+        let txtImagen = document.querySelector(".imagen").value;
+
+        
+
+        if(txtNomPro=='' || txtPrecio =='' || txtCantidad== ''){
+            alert("debe completar el formulario");
+            return;
+        }
+        else{
+            alert(txtImagen);
+        }
+
+        try{
+            let data = new FormData(frmRegistro);
+            let respuesta = await fetch("index.php?op=create",{
+                method:'POST',
+                mode: 'cors',
+                cache:'no-cache',
+                body: data
+            });
+            json = await respuesta.json();
+            console.log(data);
+        }
+        catch(err){
+            console.log("ocurrio un error."+err);
+        }
+    }
+
+    
+ 
+}

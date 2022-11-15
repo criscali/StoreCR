@@ -1,14 +1,9 @@
+
 <?php 
-require_once("header.php");
+require_once("view/header.php");
 //require_once("view/header.php");
 ?>
 
-<?php
-    if(empty($pages['datos'][0])):?>
-        <h1 class="vacio">vacio.</h1>
- <?php
- else:
-  ?> 
 <div class="listar">
 <table class="styled-table">
         
@@ -19,15 +14,15 @@ require_once("header.php");
         <td>PRECIO</td>
         <td>CANTIDAD</td>
         <td>IMAGEN</td>
-        <td>OPCION</td>
+        <td>OPCION </td>
     </tr>
 
 </thead>
 
     
     <?php
-        endif;   
-            foreach($arreglo = $pages['datos'][0] as $datos):
+            
+            foreach($arreglo = $paginationDelete['datos'][0] as $datos):
 
             ?>
     <tbody>
@@ -37,11 +32,8 @@ require_once("header.php");
             <td><?php echo $datos['precio'];?></td>
             <td><?php echo $datos['cantidad'];?></td>
             <td> <img src="<?php echo rutaImagenes.$datos['imagen'];?>" alt="" width="50px" height="50px"></td>
-            <td>
-                <a href="index.php?op=verId&cod=<?php echo $datos['codigo'];?>"><i class="fa-solid fa-pen-to-square"></i></a>    
-                <a href="index.php?op=eliminar&cod=<?php echo $datos['codigo'];?>"><i class="fa-solid fa-trash"></i></a>
-                
-                
+            <td>   
+                <a href="index.php?op=eliminar&cod=<?php echo $datos['codigo'];?>&hide=<?php echo $datos['oculto'];?>"><i class="fa-solid fa-trash-can-arrow-up"></i></a>
             </td>
         </tr>
     </tbody>
@@ -59,11 +51,11 @@ require_once("header.php");
 
 <?php
 
-for($i=1; $i<=$pages['total_paginas'];$i++):
+for($i=1; $i<=$paginationDelete['total_paginas'];$i++):
 ?>
     <ul class="pagination pagination-sm">
 
-        <li class="page-item "><a class="page-link" href="index.php?op=listar&pagina=<?php echo $i;?>"><?php echo $i;?></a></li>
+        <li class="page-item "><a class="page-link" href="index.php?op=deletedProduct&pagina=<?php echo $i;?>"><?php echo $i;?></a></li>
         <?php
 endfor;
 
@@ -73,6 +65,7 @@ endfor;
 </nav>
 
 </div>
+
 
 
 

@@ -1,15 +1,30 @@
 
 <?php
     require_once("conexion.php");
+    require_once("generador_cod_barra.php");
 
     class ProductModel{
 
         public $conexion;
+        public $resultado;
+        public $tamano_paginas;
+        public $total_paginas;
+
         public function __construct()
         {
             $this->conexion = new Conexion();
             $this->conexion = $this->conexion ->connect();
             
+        }
+
+        public function countProduct(){
+            $sql = "SELECT COUNT(codigo)AS cantidadProducto, SUM(precio) AS precioTodo FROM producto";
+            $ejecutar = $this->conexion->prepare($sql);
+            $ejecutar->execute();
+            /*$resultado = $ejecutar->rowCount(); */
+            $filas[] = $ejecutar->fetchAll();
+            $resultado = $filas;
+            return $arrayName = array("CantProducts"=> $resultado);
         }
 
         public function getProducts(){
@@ -64,14 +79,19 @@
             //$ejecutar->execute();
             //return $this->conexion->lastInsertId();
             if($ejecutar->execute()){
-                $respuestaJson = "PRODUCTO CREADO.";
+                $respuesta = "PRODUCTO CREADO.";
+/*                 $creacionCodBarra = new GeneradorCodBarra();
+                $respuesta = $creacionCodBarra->barcode($lastCode);
+                
+                echo "<script>alert('{$respuesta}');</script>"; */
             }
             else{
-                $respuestaJson = "ERROR AL CREAR EL PRODUCTO.";
+                $respuesta = "ERROR AL CREAR EL PRODUCTO.";
             }
             //$respuestaJson = json_encode($ultimoregistro[0]['codigo']);
-            return $respuestaJson;
+            return $respuesta;
         }
+
 
         public function updateProduct($codigo, $nom_pro, $precio, $cantidad, $imagen){
 
@@ -105,55 +125,80 @@
             $ejecutar->bindParam(4, $imagen);
             $ejecutar->bindParam(5, $codigo); */
             if($ejecutar->execute()){
-                $resultado = true;
+                $respuesta = "PRODUCTO ACTUALIZADO.";
+                $creacionCodBarra = new GeneradorCodBarra();
+                $prueba = "pruebadetextopruebadetextopruebadetextopruebadetextopruebadetextopruebadetexto";
+                $respuesta1 = $creacionCodBarra->barcode($prueba);
+                
+                //echo "<script>alert('{$respuesta}');</script>";
             }
             else{
-                $resultado = false;
+                $respuesta = "ERROR AL ACTUALIZAR EL PRODUCTO.";
             }
                 //$ejecutar->execute();
             //$resultado = $ejecutar->fetchColumn();
-            return json_encode($resultado);
-            //return $respuestaJson = "";
+            return $respuestas = array("actualizado"=>$respuesta, "archivotxt"=>$respuesta1);
+            
 
         }
 
         public function deleteProduct($codigo, $permiso, $oculto){
             if($permiso == 1)
             {
-                $deleteSql = "UPDATE PRODUCTO SET oculto = ? WHERE codigo = ?";
-                $ejecutar = $this->conexion->prepare($deleteSql);
-                $ejecutar->bindParam(1, $oculto);
-                $ejecutar->bindParam(2, $codigo);
-                $ejecutar->execute();
-                $respuestaJson = "PRODUCTO ELIMINADO.";
+                if($oculto == 1){
+                    $oculto=0;
+                    $deleteSql = "UPDATE PRODUCTO SET oculto = ? WHERE codigo = ?";
+                    $ejecutar = $this->conexion->prepare($deleteSql);
+                    $ejecutar->bindParam(1, $oculto);
+                    $ejecutar->bindParam(2, $codigo);
+                    $ejecutar->execute();
+                    $respuesta = "RESTAURADO";
+                }
+                else{
+                    $oculto=1;
+                    $deleteSql = "UPDATE PRODUCTO SET oculto = ? WHERE codigo = ?";
+                    $ejecutar = $this->conexion->prepare($deleteSql);
+                    $ejecutar->bindParam(1, $oculto);
+                    $ejecutar->bindParam(2, $codigo);
+                    $ejecutar->execute();
+                    $respuesta = "ELIMINADO";
+                }
+
             }
             else{
-                $respuestaJson = "NO TIENE PERMISOS PARA ELIMINAR EL PRODUCTO.";
+                $respuesta = "NO TIENE PERMISOS PARA ELIMINAR EL PRODUCTO.";
                 
             }
-            return json_encode($respuestaJson);
+            return $respuesta;
         }
         
-
-
-
-        public function pagination($paginaE){
+        public function pagination($paginaE, $operacion){
 
             $tamano_paginas=6;
             if(isset($paginaE)){
                 //$this->getProducts();
-            
-            
             //$pagina = $paginaE;
             $desde = ($paginaE-1)*$tamano_paginas;
-            $sql_total = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0";
-            $ejecutar = $this->conexion->prepare($sql_total);
+            if($operacion == 'listar'){
+                $sql_total = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0";
+                $ejecutar = $this->conexion->prepare($sql_total);
+            }
+            else if($operacion == 'deletedProduct'){
+                $sql_total = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 1";
+                $ejecutar = $this->conexion->prepare($sql_total);
+            }
             $ejecutar->execute();
             $numRegistros = $ejecutar->rowCount();
             $total_paginas = ceil($numRegistros/$tamano_paginas);
 
-            $sql_limite = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0 LIMIT $desde, $tamano_paginas";
-            $ejecutar = $this->conexion->prepare($sql_limite);
+            if($operacion == 'listar'){
+                $sql_limite = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0 LIMIT $desde, $tamano_paginas";
+                $ejecutar = $this->conexion->prepare($sql_limite);
+            }
+            else if($operacion == 'deletedProduct'){
+                $sql_limite = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 1 LIMIT $desde, $tamano_paginas";
+                $ejecutar = $this->conexion->prepare($sql_limite);
+                }
             //$resultado = $ejecutar->execute();
             $ejecutar->execute();
             $filas[] = $ejecutar->fetchAll();
@@ -165,24 +210,38 @@
 
             }
             else{
+                
                 $desde = (1-1)*$tamano_paginas;
-                $sql_total = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0";
-                $ejecutar = $this->conexion->prepare($sql_total);
+                if($operacion == 'listar'){
+                    $sql_total = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0";
+                    $ejecutar = $this->conexion->prepare($sql_total);
+                }
+                else if($operacion == 'deletedProduct'){
+                    $sql_total = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 1";
+                    $ejecutar = $this->conexion->prepare($sql_total);
+                }
                 $ejecutar->execute();
                 $numRegistros = $ejecutar->rowCount();
                 $total_paginas = ceil($numRegistros/$tamano_paginas);
-
-                $sql_limite = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0 LIMIT $desde, $tamano_paginas";
-                $ejecutar = $this->conexion->prepare($sql_limite);
-            
-
+    
+                if($operacion == 'listar'){
+                    $sql_limite = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 0 LIMIT $desde, $tamano_paginas";
+                    $ejecutar = $this->conexion->prepare($sql_limite);
+                }
+                if($operacion == 'deletedProduct'){
+                    $sql_limite = "SELECT codigo, nom_pro, precio, cantidad, imagen, oculto FROM Producto WHERE oculto = 1 LIMIT $desde, $tamano_paginas";
+                    $ejecutar = $this->conexion->prepare($sql_limite);
+                }
+                //$resultado = $ejecutar->execute();
                 $ejecutar->execute();
                 $filas[] = $ejecutar->fetchAll();
                 $resultado = $filas;
+                
+                //$arrayTodo = array('registros'=>$resultado);
+                //return $resultado[0];
                 return $arrayName = array("datos"=> $resultado, "tamanoPagina"=> $tamano_paginas, "total_paginas"=> $total_paginas);
             }
-                        
-                        
+                //return $arrayName = array("datos"=> $this->resultado, "tamanoPagina"=> $this->tamano_paginas, "total_paginas"=> $this->total_paginas);
             
         }
 

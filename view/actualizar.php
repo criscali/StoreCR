@@ -1,5 +1,5 @@
-<?php require_once("view/index.php");
-
+<?php 
+    require_once("view/header.php");
     foreach($productos as $proAct):
 ?>
 
