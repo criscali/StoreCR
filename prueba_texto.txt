@@ -1,1 +1,2 @@
 prueba de commits y cambios en el archivo txt
+segunda linea de pruebas para prueba_texto.txt
