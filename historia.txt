@@ -1,2 +1,1 @@
-esta es una primera linea
-el desarrollo de software.
+Esta es un caso de la vida real.
