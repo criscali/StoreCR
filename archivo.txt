@@ -1,0 +1,8 @@
+<<<<<<< HEAD
+=======
+esta es la primera linea en archivotxt
+esta es la segunda linea.
+esta es la tercera linea.
+esta es la cuarta linea.
+esta es la quinta linea.
+>>>>>>> RamaPrueba
