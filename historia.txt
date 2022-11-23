@@ -4,3 +4,6 @@ esta es una prueba para ver lo que se hace en github y actualizarlo a git.
 la vida que yo tengo vale una puta mierda.
 que gonorrea es esto a veces es algo complicado.
 agregando linea para verlo en la rama RamaPrueba.
+se clonó el repositorio de criscali a CristianRestrepoTsi.
+agrego linea desde repositorio StoreCR usuario criscali el dueño de esto pape.
+linea 9 papi en respuesta, esta linea se hace desde git CristianRestrepoTsi.
